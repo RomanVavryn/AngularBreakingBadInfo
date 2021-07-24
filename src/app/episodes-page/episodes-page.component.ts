@@ -18,8 +18,8 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.episodesSub = this.http.getAllEpisodes()
       .subscribe(
-        (data: EpisodesInterface[]) => {
-          this.episodesArr = data
+        (episodesInterfaces: EpisodesInterface[]) => {
+          this.episodesArr = episodesInterfaces
           this.episodesLoaded = true;
         },
         (error => {
@@ -33,7 +33,4 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
     this.episodesSub?.unsubscribe();
   }
 
-  scrollToTop() {
-    window.scrollTo(0, 0)
-  }
 }
