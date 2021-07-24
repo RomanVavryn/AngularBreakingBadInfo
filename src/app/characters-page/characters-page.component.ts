@@ -19,8 +19,9 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.charactersSub = this.http.getAllCharacters()
       .subscribe(
-        (data) => {
+        (data: CharacterInterface[]) => {
           this.charactersArr = data
+          console.log(this.charactersArr)
           this.charactersLoaded = true;
         },
         (error => {
