@@ -1,1 +1,46 @@
-<p>characters-page works!</p>
+<div #scrollMe class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-4 py-4"
+     *ngIf="charactersLoaded; else characterLoading;">
+  <div class="col" *ngFor="let characters of charactersArr">
+    <div class="card mx-auto" style="width: 18rem;">
+      <img [src]="characters?.img" class="card-img-top" alt="{{characters.nickname}}">
+      <div class="card-img-overlay">
+        <h5 class="card-title text-white">id: {{characters ? characters?.char_id : ''}}</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{characters?.name}} ({{characters?.nickname}})</h5>
+        <p class="card-text">{{characters?.occupation?.join(', ')}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          Status:
+          <span
+            [class.text-success]="characters?.status === 'Alive'"
+            [class.text-warning]="characters?.status === 'Presumed dead'"
+            [class.text-danger]="characters?.status === 'Deceased'">
+            {{characters?.status}}
+          </span>
+        </li>
+        <li class="list-group-item">Seasons: {{characters?.appearance?.join(', ')}}</li>
+        <li class="list-group-item">Actor: {{characters?.portrayed}}</li>
+      </ul>
+    </div>
+
+
+  </div>
+</div>
+
+
+<ng-template #characterLoading>
+  <div class="d-flex justify-content-center align-items-center w-100 vh-100">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>
+
+<button
+  type="button"
+  class="btn btn-lg position-fixed bottom-0 end-0 mb-4 me-4 btn-primary"
+  (click)="scrollToTop()"
+>Top
+</button>

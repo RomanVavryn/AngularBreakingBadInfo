@@ -1,5 +1,47 @@
-<h1 class="pt-4 h1 text-center">Breaking Bad info</h1>
-<p class="text-center">this website-spa build using Angular and using public breaking bad api to get information
+<h1 class="pt-4 h1 text-center mb-3">Breaking Bad info</h1>
+<p class="text-center">this website <a class="text-decoration-none"
+                                       href="https://en.wikipedia.org/wiki/Single-page_application">(SPA)</a> build
+  using <a class="text-decoration-none" href="https://en.wikipedia.org/wiki/Angular_(web_framework)">Angular</a> and
+  using public <a class="text-decoration-none" href="https://breakingbadapi.com/">breaking bad api</a> to get
+  information
   about <a class="text-decoration-none" href="https://en.wikipedia.org/wiki/Breaking_Bad">American neo-Western crime
     drama television
     series</a></p>
+<p class="text-center h6 mb-4">Also this is my Angular pet-project to improve my skills</p>
+
+<h2 class="text-center mb-4">Quote</h2>
+
+<div class="row" *ngIf="quoteLoaded else quoteLoader">
+  <div class=" col-md-10 col-lg-8 col-xl-6 mx-auto">
+    <div class="card mb-4 text-white bg-dark">
+      <div class="card-header">
+        Quote id: {{randomQuote?.quote_id}}
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <p class="mb-4">{{randomQuote?.quote}}</p>
+          <footer class="blockquote-footer">{{randomQuote?.author}}</footer>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #quoteLoader>
+  <div class="d-flex justify-content-center w-100">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>
+
+<hr class="mb-4">
+
+<h4 class="text-center mb-4">Statistic:</h4>
+
+<div class="d-flex justify-content-center">
+  <p class="mx-2 text-center">Characters: {{statisticCount.characters}}</p>
+  <p class="mx-2 text-center">Episodes: {{statisticCount.episodes}}</p>
+  <p class="mx-2 text-center">Quotes: {{statisticCount.quotes}}</p>
+  <p class="mx-2 text-center">Deaths: {{statisticCount.deaths}}</p>
+</div>
