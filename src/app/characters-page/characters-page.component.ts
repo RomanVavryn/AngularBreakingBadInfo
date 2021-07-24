@@ -21,7 +21,6 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: CharacterInterface[]) => {
           this.charactersArr = data
-          console.log(this.charactersArr)
           this.charactersLoaded = true;
         },
         (error => {

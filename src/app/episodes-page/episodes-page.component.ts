@@ -20,7 +20,6 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: EpisodesInterface[]) => {
           this.episodesArr = data
-          console.log(this.episodesArr)
           this.episodesLoaded = true;
         },
         (error => {
