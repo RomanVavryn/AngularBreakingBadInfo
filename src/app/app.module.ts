@@ -11,6 +11,7 @@ import {QuotePageComponent} from './quote-page/quote-page.component';
 import {DeathsPageComponent} from './deaths-page/deaths-page.component';
 import {NotFoundPageComponent} from './not-found-page/not-found-page.component';
 import {HttpClientModule} from "@angular/common/http";
+import { ToTopBtnComponent } from './shared/to-top-btn/to-top-btn.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {HttpClientModule} from "@angular/common/http";
     QuotePageComponent,
     DeathsPageComponent,
     NotFoundPageComponent,
-    NavbarComponent
+    NavbarComponent,
+    ToTopBtnComponent
   ],
   imports: [
     BrowserModule,
