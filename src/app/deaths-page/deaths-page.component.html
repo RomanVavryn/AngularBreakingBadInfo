@@ -1,1 +1,28 @@
-<p>deaths-page works!</p>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 py-4"
+     *ngIf="deathsLoaded else deathLoader">
+  <div class="col" *ngFor="let death of deathsArr">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Killer: {{death.responsible}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">killed: {{death.death}}</h6>
+        <p class="card-text">Last words: {{death.last_words}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Death cause: {{death.cause}}</li>
+        <li class="list-group-item">In season: {{death.season}}, episode: {{death.episode}}</li>
+        <li class="list-group-item">Number of deaths: {{death.number_of_deaths}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ng-template #deathLoader>
+  <div class="d-flex justify-content-center align-items-center w-100 vh-100">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>
+
+<app-to-top-btn></app-to-top-btn>
+
