@@ -19,8 +19,8 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.charactersSub = this.http.getAllCharacters()
       .subscribe(
-        (data: CharacterInterface[]) => {
-          this.charactersArr = data
+        (characters: CharacterInterface[]) => {
+          this.charactersArr = characters
           this.charactersLoaded = true;
         },
         (error => {
@@ -32,10 +32,6 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.charactersSub?.unsubscribe();
-  }
-
-  scrollToTop() {
-    window.scrollTo(0, 0)
   }
 
 }
