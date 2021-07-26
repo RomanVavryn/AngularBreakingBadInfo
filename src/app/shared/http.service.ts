@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -32,6 +32,7 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
+  // characters
   getAllCharacters(): Observable<any> {
     return this.http.get(this.allCharacters);
   }
@@ -44,6 +45,15 @@ export class HttpService {
     return this.http.get(this.randomCharacter);
   }
 
+  getCharactersByCategory(category: string): Observable<any> {
+    return this.http.get(this.allCharacters, {params: new HttpParams().set('category', category)});
+  }
+
+  getCharacterByName(name: string): Observable<any> {
+    return this.http.get(this.allCharacters, {params: new HttpParams().set('name', name)});
+  }
+
+  // episodes
   getAllEpisodes(): Observable<any> {
     return this.http.get(this.allEpisodes);
   }

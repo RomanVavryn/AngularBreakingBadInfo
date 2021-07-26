@@ -1,6 +1,66 @@
-<div #scrollMe class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-4 py-4"
+<div class="row">
+
+  <div class="col-2">
+    <form [formGroup]="categoryForm!" class="mt-4 w-100">
+      <select formControlName="categoryCharacters" id="categoryCharacters" class="form-select">
+        <option value="all">All</option>
+        <option value="Breaking+Bad">Breaking Bad</option>
+        <option value="Better+Call+Saul">Better Call Saul</option>
+      </select>
+      <label for="categoryCharacters">category of characters</label>
+    </form>
+  </div>
+
+  <div class="col-3">
+    <form [formGroup]="idSearchForm!" (ngSubmit)="onIdSearch()" class="mt-4 w-100">
+      <div class="input-group">
+        <span class="input-group-text" id="characterById">character by id</span>
+        <input type="number"
+               id="idSearch"
+               name="idSearch"
+               class="form-control"
+               placeholder="character id"
+               aria-label="character by id"
+               aria-describedby="characterById"
+               min="1"
+               max="116"
+               formControlName="characterId">
+        <button class="btn btn-outline-secondary rounded" [disabled]="idSearchForm?.get('characterId')?.invalid"
+                type="submit"
+                id="button-addon2">GET
+        </button>
+        <label for="idSearch">get id from 1 to 57 and from 112 to 116</label>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-2">
+    <button class="btn btn-dark mt-4 w-100" (click)="onRandomCharacter()">Random characters</button>
+  </div>
+
+  <div class="col-4">
+    <form [formGroup]="searchForm!" (ngSubmit)="onNameSearch()">
+      <div class="input-group mt-4 w-100">
+        <input type="text" id="nameFilter" name="nameFilter" class="form-control" formControlName="filter"
+               placeholder="Search, Filter by Name">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-1">
+    <select class="form-select mt-4 w-100">
+      <option selected>10</option>
+      <option value="1">20</option>
+      <option value="2">30</option>
+      <option value="3">40</option>
+    </select>
+  </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-4 py-4"
      *ngIf="charactersLoaded; else characterLoading;">
-  <div class="col" *ngFor="let characters of charactersArr">
+  <div class="col mx-auto" *ngFor="let characters of charactersArr">
     <div class="card mx-auto" style="width: 18rem;">
       <img [src]="characters?.img" class="card-img-top" alt="{{characters.nickname}}">
       <div class="card-img-overlay">
@@ -26,14 +86,10 @@
           Birthday: {{characters?.birthday !== 'Unknown' ? (characters?.birthday | date) : characters?.birthday }}</li>
         <li class="list-group-item">Category: {{characters?.category}}</li>
         <li class="list-group-item">Actor: {{characters?.portrayed}}</li>
-
       </ul>
     </div>
-
-
   </div>
 </div>
-
 
 <ng-template #characterLoading>
   <div class="d-flex justify-content-center align-items-center w-100 vh-100">
