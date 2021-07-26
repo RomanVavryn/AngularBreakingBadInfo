@@ -128,8 +128,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
     this.charactersLoaded = false;
     this.searchValue = newSearchValue;
 
-    if (!newSearchValue) {
-      console.log('empty search')
+    if (newSearchValue === '') {
       this.charactersSub = this.http.getAllCharacters()
         .subscribe(
           (characters: CharacterInterface[]) => {
@@ -141,18 +140,18 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
             console.error(error);
           })
         );
+    } else {
+      this.charactersSub = this.http.getCharacterByName(newSearchValue).subscribe(
+        (character: CharacterInterface[]) => {
+          this.charactersArr = character;
+          this.charactersLoaded = true;
+        },
+        (error => {
+          console.log('something went wrong!');
+          console.error(error);
+        })
+      )
     }
-
-    this.charactersSub = this.http.getCharacterByName(newSearchValue).subscribe(
-      (character: CharacterInterface[]) => {
-        this.charactersArr = character;
-        this.charactersLoaded = true;
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    )
   }
 
   ngOnDestroy(): void {
