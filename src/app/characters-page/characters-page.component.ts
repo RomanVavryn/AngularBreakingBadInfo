@@ -119,7 +119,8 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
   }
 
   onNameSearch() {
-    const newSearchValue = this.searchForm?.get('filter')?.value
+    const newSearchValue = this.searchForm?.get('filter')?.value.split(' ').join('+')
+    console.log(newSearchValue)
     if (this.searchValue === newSearchValue) {
       return;
     }
