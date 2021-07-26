@@ -119,8 +119,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
   }
 
   onNameSearch() {
-    const newSearchValue = this.searchForm?.get('filter')?.value.split(' ').join('+')
-    console.log(newSearchValue)
+    const newSearchValue = this.searchForm?.get('filter')?.value?.split(' ').join('+');
     if (this.searchValue === newSearchValue) {
       return;
     }
@@ -128,6 +127,21 @@ export class CharactersPageComponent implements OnInit, OnDestroy {
     this.charactersSub?.unsubscribe();
     this.charactersLoaded = false;
     this.searchValue = newSearchValue;
+
+    if (!newSearchValue) {
+      console.log('empty search')
+      this.charactersSub = this.http.getAllCharacters()
+        .subscribe(
+          (characters: CharacterInterface[]) => {
+            this.charactersArr = characters
+            this.charactersLoaded = true;
+          },
+          (error => {
+            console.log('something went wrong!');
+            console.error(error);
+          })
+        );
+    }
 
     this.charactersSub = this.http.getCharacterByName(newSearchValue).subscribe(
       (character: CharacterInterface[]) => {
