@@ -10,7 +10,7 @@ export class HttpService {
   baseUrl: string = 'https://www.breakingbadapi.com/api';
 
   // Character,s
-  allCharacters: string = this.baseUrl + '/characters';
+  Characters: string = this.baseUrl + '/characters';
   singleCharacter: string = this.baseUrl + '/characters/';
   randomCharacter: string = this.baseUrl + '/character/random';
 
@@ -33,24 +33,28 @@ export class HttpService {
   }
 
   // characters
-  getAllCharacters(): Observable<any> {
-    return this.http.get(this.allCharacters);
+  getCharacters(count?: string, page?: number, category?: string, search?: string): Observable<any> {
+    let params = new HttpParams();
+    if (count !== '99') {
+      params = params.append('limit', count!);
+      params = params.append('offset', page!);
+    }
+    if (category !== 'all') {
+      params = params.append('category', category!);
+    }
+    if (!!search) {
+      params = params.append('name', search!);
+    }
+
+    return this.http.get(this.Characters, {params: params});
   }
 
   getSingleCharacter(id: number): Observable<any> {
     return this.http.get(this.singleCharacter + id);
   }
 
-  getRandomCharacter(): Observable<any> {
-    return this.http.get(this.randomCharacter);
-  }
-
-  getCharactersByCategory(category: string): Observable<any> {
-    return this.http.get(this.allCharacters, {params: new HttpParams().set('category', category)});
-  }
-
-  getCharacterByName(name: string): Observable<any> {
-    return this.http.get(this.allCharacters, {params: new HttpParams().set('name', name)});
+  getRandomCharacters(count: number): Observable<any> {
+    return this.http.get(this.randomCharacter, {params: new HttpParams().set('limit', count)});
   }
 
   // episodes

@@ -1,6 +1,19 @@
 <div class="row">
 
-  <div class="col-2">
+  <div class="col-md-2 col-xxl-1">
+    <form [formGroup]="charactersPerPageForm!">
+      <select formControlName="characterShowCount" id="showCount" class="form-select mt-4 w-100">
+        <option value="1">1</option>
+        <option value="12">12</option>
+        <option value="24">24</option>
+        <option value="36">36</option>
+        <option value="99">all</option>
+      </select>
+      <label for="showCount">show count</label>
+    </form>
+  </div>
+
+  <div class="col-md-4 col-lg-4 col-xl-2">
     <form [formGroup]="categoryForm!" class="mt-4 w-100">
       <select formControlName="categoryCharacters" id="categoryCharacters" class="form-select">
         <option value="all">All</option>
@@ -11,50 +24,58 @@
     </form>
   </div>
 
-  <div class="col-3">
-    <form [formGroup]="idSearchForm!" (ngSubmit)="onIdSearch()" class="mt-4 w-100">
+  <div class="col-md-6 col-lg-4">
+    <form [formGroup]="searchForm!" (ngSubmit)="onNameSearch()" class="mt-4 mb-2 w-100">
       <div class="input-group">
-        <span class="input-group-text" id="characterById">character by id</span>
-        <input type="number"
-               id="idSearch"
-               name="idSearch"
-               class="form-control"
-               placeholder="character id"
-               aria-label="character by id"
-               aria-describedby="characterById"
-               min="1"
-               max="116"
-               formControlName="characterId">
-        <button class="btn btn-outline-secondary rounded" [disabled]="idSearchForm?.get('characterId')?.invalid"
-                type="submit"
-                id="button-addon2">GET
+        <input formControlName="filter" type="text" id="nameFilter" name="nameFilter" class="form-control"
+               placeholder="Search by Name">
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-4 col-lg-3 col-xxl-2">
+    <form [formGroup]="randomForm!" (ngSubmit)="onRandomCharacters()" class="mt-4 w-100">
+      <div class="input-group">
+        <span class="input-group-text">Random</span>
+        <input formControlName="randomCount" type="number" id="randomCharacters" name="randomCharacters"
+               class="form-control" min="1" max="36" value="1">
+        <button type="submit" class="btn btn-outline-secondary rounded"
+                [disabled]="randomForm?.get('randomCount')?.invalid">GET
         </button>
-        <label for="idSearch">get id from 1 to 57 and from 112 to 116</label>
       </div>
+      <label for="randomCharacters">from 1 to 36</label>
     </form>
   </div>
 
-  <div class="col-2">
-    <button class="btn btn-dark mt-4 w-100" (click)="onRandomCharacter()">Random characters</button>
-  </div>
-
-  <div class="col-4">
-    <form [formGroup]="searchForm!" (ngSubmit)="onNameSearch()">
-      <div class="input-group mt-4 w-100">
-        <input type="text" id="nameFilter" name="nameFilter" class="form-control" formControlName="filter"
-               placeholder="Search, Filter by Name">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
+  <div class="col-md-5 col-lg-4 col-xl-3">
+    <form [formGroup]="idSearchForm!" (ngSubmit)="onIdSearch()" class="my-4  w-100">
+      <div class="input-group">
+        <span class="input-group-text">Character ID</span>
+        <input formControlName="characterId" type="number" id="idSearch" name="idSearch" class="form-control"
+               placeholder="character id" min="1" max="116" value="1">
+        <button type="submit" class="btn btn-outline-secondary rounded"
+                [disabled]="idSearchForm?.get('characterId')?.invalid">GET
+        </button>
       </div>
+      <label for="idSearch">from 1 to 57 and 112 to 116</label>
     </form>
   </div>
 
-  <div class="col-1">
-    <select class="form-select mt-4 w-100">
-      <option selected>10</option>
-      <option value="1">20</option>
-      <option value="2">30</option>
-      <option value="3">40</option>
-    </select>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <ul class="pagination justify-content-center">
+      <li class="page-item mx-2"
+          [ngClass]="charactersLoaded ? prevPageDisabled ? 'disabled' : '' : 'disabled'">
+        <button type="button" class="page-link" (click)="onPageChange('prev')">Prev</button>
+      </li>
+      <li class="page-item mx-2"
+          [ngClass]="charactersLoaded ? nextPageDisabled ? 'disabled' : '' : 'disabled'">
+        <button type="button" class="page-link" (click)="onPageChange('next')">Next</button>
+      </li>
+    </ul>
   </div>
 </div>
 
@@ -88,6 +109,21 @@
         <li class="list-group-item">Actor: {{characters?.portrayed}}</li>
       </ul>
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <ul class="pagination justify-content-center">
+      <li class="page-item mx-2"
+          [ngClass]="charactersLoaded ? prevPageDisabled ? 'disabled' : '' : 'disabled'">
+        <button type="button" class="page-link" (click)="onPageChange('prev')">Prev</button>
+      </li>
+      <li class="page-item mx-2"
+          [ngClass]="charactersLoaded ? nextPageDisabled ? 'disabled' : '' : 'disabled'">
+        <button type="button" class="page-link" (click)="onPageChange('next')">Next</button>
+      </li>
+    </ul>
   </div>
 </div>
 
