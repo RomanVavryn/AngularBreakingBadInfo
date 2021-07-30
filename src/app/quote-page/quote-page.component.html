@@ -1,5 +1,48 @@
+<div class="row">
+
+  <div class="col-md-4 col-lg-4 col-xl-2">
+    <form [formGroup]="categoryForm!" class="mt-4 w-100">
+      <select formControlName="quoteCategory" id="categoryCharacters" class="form-select">
+        <option value="all">All</option>
+        <option value="Breaking+Bad">Breaking Bad</option>
+        <option value="Better+Call+Saul">Better Call Saul</option>
+      </select>
+    </form>
+  </div>
+
+  <div class="col-md-5 col-lg-4 col-xl-3">
+    <form [formGroup]="idSearchForm!" (ngSubmit)="onIdSearch()" class="mt-4  w-100">
+      <div class="input-group">
+        <span class="input-group-text">Quote ID</span>
+        <input formControlName="quoteId" type="number" id="idSearch" name="idSearch" class="form-control"
+               placeholder="character id" min="1" max="116" value="1">
+        <button type="submit" class="btn btn-outline-secondary rounded"
+                [disabled]="idSearchForm?.get('quoteId')?.invalid">GET
+        </button>
+      </div>
+      <label for="idSearch">from 1 to 30 and from 63 to 102</label>
+    </form>
+  </div>
+
+  <div class="col-md-6 col-lg-4">
+    <form [formGroup]="searchForm!" (ngSubmit)="onNameSearch()" class="mt-4 mb-2 w-100">
+      <div class="input-group">
+        <input formControlName="filter" type="text" id="nameFilter" name="nameFilter" class="form-control"
+               placeholder="Full Name">
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+      </div>
+    </form>
+    <label for="nameFilter">Search quotes by author "Full name!"</label>
+  </div>
+
+  <div class="col-2">
+    <button type="button" class="btn btn-dark mt-4" (click)="getRandomQuote()">Random</button>
+  </div>
+
+</div>
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 py-4" *ngIf="quotesLoaded else quoteLoader">
-  <div class="col" *ngFor="let quote of quoteArr">
+  <div class="col mx-auto" *ngFor="let quote of quoteArr">
     <div class="card mb-4 text-white bg-dark">
       <div class="card-header">
         Quote id: {{quote?.quote_id}}
@@ -11,6 +54,12 @@
         </blockquote>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <h2 *ngIf="quoteArr?.length! < 1" class="text-center">No Quotes Found!</h2>
   </div>
 </div>
 

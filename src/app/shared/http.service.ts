@@ -19,8 +19,9 @@ export class HttpService {
   singleEpisode: string = this.baseUrl + '/episodes/';
 
   // Quotes,s
-  allQuotes: string = this.baseUrl + '/quotes';
+  Quotes: string = this.baseUrl + '/quotes';
   singleQuote: string = this.baseUrl + '/quotes/';
+  AuthorQuote: string = this.baseUrl + '/quote';
   randomQuote: string = this.baseUrl + '/quote/random';
 
   // Death,s
@@ -67,12 +68,20 @@ export class HttpService {
   }
 
   // quotes
-  getAllQuotes(): Observable<any> {
-    return this.http.get(this.allQuotes);
+  getQuotes(category: string): Observable<any> {
+    let params = new HttpParams();
+      params = params.append('series', category!);
+    return this.http.get(this.Quotes, {params: params});
   }
 
-  getSingleQuotes(id: number): Observable<any> {
+  getSingleQuote(id: number): Observable<any> {
     return this.http.get(this.singleQuote + id);
+  }
+
+  getAuthorQuotes(search: string): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('author', search!);
+    return this.http.get(this.AuthorQuote, {params: params});
   }
 
   getRandomQuotes(): Observable<any> {
