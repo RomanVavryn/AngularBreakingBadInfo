@@ -33,7 +33,7 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
     })
 
     this.idSearchForm = new FormGroup({
-      'episodeId': new FormControl(1, [Validators.required, Validators.min(1), Validators.max(116)])
+      'episodeId': new FormControl(1, [Validators.required, Validators.min(1), Validators.max(102)])
     })
 
     this.episodesSub = this.http.getEpisodes(this.episodesCategory)
