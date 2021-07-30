@@ -41,7 +41,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     })
 
     this.categoryForm = new FormGroup({
-      'categoryCharacters': new FormControl('all')
+      'episodesCategory': new FormControl('all')
     })
 
     this.categoryForm.valueChanges.subscribe(value => {
@@ -171,7 +171,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     this.charactersPerPageForm?.patchValue({'characterShowCount': '99'});
     this.charactersPage = 0;
     this.charactersCategory = 'all';
-    this.categoryForm?.patchValue({'categoryCharacters': 'all'});
+    this.categoryForm?.patchValue({'episodesCategory': 'all'});
     this.searchValue = '';
     this.searchForm?.patchValue({'filter': ''});
     this.charactersLoaded = false;
@@ -189,7 +189,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     this.charactersPerPageForm?.patchValue({'characterShowCount': '99'})
     this.charactersPerPage = '99';
     this.charactersPage = 0;
-    this.categoryForm?.patchValue({'categoryCharacters': 'all'})
+    this.categoryForm?.patchValue({'episodesCategory': 'all'})
     this.charactersCategory = 'all';
 
     this.charactersSub = this.http.getCharacters(this.charactersPerPage, this.charactersPage, this.charactersCategory, newSearchValue)

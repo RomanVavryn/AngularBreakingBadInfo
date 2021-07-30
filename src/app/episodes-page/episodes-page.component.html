@@ -1,3 +1,31 @@
+<div class="row">
+
+  <div class="col-md-4 col-lg-4 col-xl-2">
+    <form [formGroup]="categoryForm!" class="mt-4 w-100">
+      <select formControlName="episodesCategory" id="categoryCharacters" class="form-select">
+        <option value="Breaking+Bad">Breaking Bad</option>
+        <option value="Better+Call+Saul">Better Call Saul</option>
+      </select>
+    </form>
+  </div>
+
+  <div class="col-md-5 col-lg-4 col-xl-3">
+    <form [formGroup]="idSearchForm!" (ngSubmit)="onIdSearch()" class="my-4  w-100">
+      <div class="input-group">
+        <span class="input-group-text">Character ID</span>
+        <input formControlName="episodeId" type="number" id="idSearch" name="idSearch" class="form-control"
+               placeholder="character id" min="1" max="116" value="1">
+        <button type="submit" class="btn btn-outline-secondary rounded"
+                [disabled]="idSearchForm?.get('episodeId')?.invalid">GET
+        </button>
+      </div>
+      <label for="idSearch">from 1 to 102</label>
+    </form>
+  </div>
+
+</div>
+
+
 <div *ngIf="episodesLoaded else episodeLoader">
 <div class="accordion py-4"
      *ngFor="let episode of episodesArr;let i = index"
@@ -34,6 +62,7 @@
 
 </div>
 </div>
+
 <ng-template #episodeLoader>
   <div class="d-flex justify-content-center align-items-center w-100 vh-100">
     <div class="spinner-border text-dark" role="status">

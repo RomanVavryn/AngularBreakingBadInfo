@@ -15,7 +15,7 @@ export class HttpService {
   randomCharacter: string = this.baseUrl + '/character/random';
 
   // Episode,s
-  allEpisodes: string = this.baseUrl + '/episodes';
+  Episodes: string = this.baseUrl + '/episodes';
   singleEpisode: string = this.baseUrl + '/episodes/';
 
   // Quotes,s
@@ -58,14 +58,15 @@ export class HttpService {
   }
 
   // episodes
-  getAllEpisodes(): Observable<any> {
-    return this.http.get(this.allEpisodes);
+  getEpisodes(category: string): Observable<any> {
+    return this.http.get(this.Episodes, {params: {'series': category}});
   }
 
   getSingleEpisode(id: number): Observable<any> {
     return this.http.get(this.singleEpisode + id);
   }
 
+  // quotes
   getAllQuotes(): Observable<any> {
     return this.http.get(this.allQuotes);
   }
