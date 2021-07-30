@@ -13,20 +13,20 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
   // character,s
   charactersSub: Subscription | undefined;
   charactersArr: CharacterInterface[] | undefined;
-  // options
-  charactersCategory: string = 'all';
-  charactersPerPage: string = '12';
-  charactersPage: number = 0;
-  searchValue: string = ''; // need for searchForm
   charactersLoaded: boolean = false;
-  nextPageDisabled: boolean = false;
-  prevPageDisabled: boolean = false;
   // filters
   charactersPerPageForm: FormGroup | undefined;
   categoryForm: FormGroup | undefined;
   searchForm: FormGroup | undefined;
   randomForm: FormGroup | undefined;
   idSearchForm: FormGroup | undefined;
+  // options
+  charactersCategory: string = 'all';
+  charactersPerPage: string = '12';
+  charactersPage: number = 0;
+  searchValue: string = ''; // need for searchForm
+  nextPageDisabled: boolean = false;
+  prevPageDisabled: boolean = false;
 
   constructor(private http: HttpService) {
   }
@@ -166,6 +166,17 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     this.nextPageDisabled = false;
   }
 
+  private reset(): void {
+    this.charactersPerPage = '99';
+    this.charactersPerPageForm?.patchValue({'characterShowCount': '99'});
+    this.charactersPage = 0;
+    this.charactersCategory = 'all';
+    this.categoryForm?.patchValue({'categoryCharacters': 'all'});
+    this.searchValue = '';
+    this.searchForm?.patchValue({'filter': ''});
+    this.charactersLoaded = false;
+  }
+
   onNameSearch() {
     const newSearchValue = this.searchForm?.get('filter')?.value?.split(' ').join('+');
     if (this.searchValue === newSearchValue) {
@@ -234,14 +245,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
       return;
     }
 
-    this.charactersPerPage = '99'
-    this.charactersPerPageForm?.patchValue({'characterShowCount': '99'});
-    this.charactersPage = 0;
-    this.charactersCategory = 'all';
-    this.categoryForm?.patchValue({'categoryCharacters': 'all'});
-    this.searchValue = '';
-    this.searchForm?.patchValue({'filter': ''});
-    this.charactersLoaded = false;
+    this.reset();
     this.canChangePage();
     this.charactersSub?.unsubscribe();
 
@@ -266,14 +270,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
       return;
     }
 
-    this.charactersPerPage = '99';
-    this.charactersPerPageForm?.patchValue({'characterShowCount': '99'});
-    this.charactersPage = 0;
-    this.charactersCategory = 'all';
-    this.categoryForm?.patchValue({'categoryCharacters': 'all'});
-    this.searchValue = '';
-    this.searchForm?.patchValue({'filter': ''});
-    this.charactersLoaded = false;
+    this.reset();
     this.canChangePage();
     this.charactersSub?.unsubscribe();
 
@@ -293,5 +290,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
   ngOnDestroy(): void {
     this.charactersSub?.unsubscribe();
   }
+
+
 
 }
