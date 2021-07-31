@@ -15,9 +15,8 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
   episodesLoaded: boolean = false;
 
   categoryForm: FormGroup | undefined;
-  episodesCategory: string = 'Breaking+Bad';
   idSearchForm: FormGroup | undefined;
-
+  episodesCategory: string = 'Breaking+Bad';
 
   constructor(private http: HttpService) {
   }
@@ -29,7 +28,7 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
     })
 
     this.categoryForm.valueChanges.subscribe(value => {
-      this.getCategoryCharacters(value.episodesCategory);
+      this.getEpisodesCategory(value.episodesCategory);
     })
 
     this.idSearchForm = new FormGroup({
@@ -49,7 +48,7 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
       );
   }
 
-  private getCategoryCharacters(episodesCategory: string) {
+  private getEpisodesCategory(episodesCategory: string) {
     if (this.episodesCategory === episodesCategory) {
       return;
     }

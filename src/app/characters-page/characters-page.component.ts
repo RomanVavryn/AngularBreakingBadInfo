@@ -41,7 +41,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     })
 
     this.categoryForm = new FormGroup({
-      'episodesCategory': new FormControl('all')
+      'categoryCharacters': new FormControl('all')
     })
 
     this.categoryForm.valueChanges.subscribe(value => {
@@ -142,15 +142,21 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
       this.nextPageDisabled = true;
       return;
     }
-
-    if (this.charactersCategory === 'Better+Call+Saul' && this.charactersArr![0].char_id === 7) {
+    if (this.charactersPerPage !== '1' && this.charactersCategory === 'Better+Call+Saul') {
       this.prevPageDisabled = true;
-    }
-    if (this.charactersCategory === 'Better+Call+Saul' && this.charactersArr![this.charactersArr?.length! - 1].char_id === 116) {
       this.nextPageDisabled = true;
       return;
     }
-
+    if (this.charactersCategory === 'Better+Call+Saul' && this.charactersArr![0].char_id === 7) {
+      this.prevPageDisabled = true;
+      this.nextPageDisabled = false;
+      return;
+    }
+    if (this.charactersCategory === 'Better+Call+Saul' && this.charactersArr![this.charactersArr?.length! - 1].char_id === 116) {
+      this.prevPageDisabled = false;
+      this.nextPageDisabled = true;
+      return;
+    }
     if (this.charactersArr![0].char_id === 1) {
       this.prevPageDisabled = true;
       this.nextPageDisabled = false;
@@ -161,7 +167,6 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
       this.nextPageDisabled = true;
       return;
     }
-
     this.prevPageDisabled = false;
     this.nextPageDisabled = false;
   }
@@ -171,7 +176,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     this.charactersPerPageForm?.patchValue({'characterShowCount': '99'});
     this.charactersPage = 0;
     this.charactersCategory = 'all';
-    this.categoryForm?.patchValue({'episodesCategory': 'all'});
+    this.categoryForm?.patchValue({'categoryCharacters': 'all'});
     this.searchValue = '';
     this.searchForm?.patchValue({'filter': ''});
     this.charactersLoaded = false;
@@ -189,7 +194,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     this.charactersPerPageForm?.patchValue({'characterShowCount': '99'})
     this.charactersPerPage = '99';
     this.charactersPage = 0;
-    this.categoryForm?.patchValue({'episodesCategory': 'all'})
+    this.categoryForm?.patchValue({'categoryCharacters': 'all'})
     this.charactersCategory = 'all';
 
     this.charactersSub = this.http.getCharacters(this.charactersPerPage, this.charactersPage, this.charactersCategory, newSearchValue)
@@ -290,7 +295,6 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
   ngOnDestroy(): void {
     this.charactersSub?.unsubscribe();
   }
-
 
 
 }

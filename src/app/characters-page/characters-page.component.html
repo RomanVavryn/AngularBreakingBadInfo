@@ -44,7 +44,7 @@
                 [disabled]="randomForm?.get('randomCount')?.invalid">GET
         </button>
       </div>
-      <label for="randomCharacters">from 1 to 36</label>
+      <label for="randomCharacters">from 1 to 36 characters</label>
     </form>
   </div>
 
@@ -109,6 +109,12 @@
         <li class="list-group-item">Actor: {{characters?.portrayed}}</li>
       </ul>
     </div>
+  </div>
+</div>
+
+<div class="row my-4" *ngIf="charactersArr?.length! < 1">
+  <div class="col-12">
+    <h2  class="text-center">No Characters Found!</h2>
   </div>
 </div>
 

@@ -9,9 +9,10 @@ import {QuoteInterface} from "../shared/interfaces/quote.interface";
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit, OnDestroy {
-  quoteLoaded: boolean = false;
   randomQuoteSub: Subscription | undefined;
   randomQuote: QuoteInterface | undefined;
+  quoteLoaded: boolean = false;
+
   statisticCount = {
     characters: 62,
     episodes: 102,

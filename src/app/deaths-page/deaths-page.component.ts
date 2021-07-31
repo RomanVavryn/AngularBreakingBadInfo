@@ -18,7 +18,6 @@ export class DeathsPageComponent implements OnInit, OnDestroy {
   deathCount: number | undefined;
 
   deathsSub: Subscription | undefined;
-  deathCountSub: Subscription | undefined;
   randomDeathSub: Subscription | undefined;
   searchForm: FormGroup | undefined;
   searchValue: string = ''; // need for searchForm
@@ -34,7 +33,7 @@ export class DeathsPageComponent implements OnInit, OnDestroy {
 
     this.getAllDeaths();
 
-    this.deathCountSub = this.http.getDeathCount().subscribe(
+    this.http.getDeathCount().subscribe(
       (deathsCount) => {
         this.deathCount = deathsCount[0].deathCount;
       },
@@ -97,7 +96,6 @@ export class DeathsPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.deathsSub?.unsubscribe();
-    this.deathCountSub?.unsubscribe();
     this.randomDeathSub?.unsubscribe();
   }
 

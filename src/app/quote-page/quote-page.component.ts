@@ -10,15 +10,14 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./quote-page.component.scss']
 })
 export class QuotePageComponent implements OnInit, OnDestroy {
-  quotesLoaded: boolean = false;
   quotesSub: Subscription | undefined;
   quoteArr: QuoteInterface[] | undefined;
-
+  quotesLoaded: boolean = false;
 
   categoryForm: FormGroup | undefined;
-  quotesCategory: string = 'all';
   idSearchForm: FormGroup | undefined;
   searchForm: FormGroup | undefined;
+  quotesCategory: string = 'all';
   searchValue: string = ''; // need for searchForm
 
   constructor(private http: HttpService) {
@@ -26,13 +25,12 @@ export class QuotePageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-
     this.categoryForm = new FormGroup({
       'quoteCategory': new FormControl('all')
     })
 
     this.categoryForm.valueChanges.subscribe(value => {
-      this.getCategoryCharacters(value.quoteCategory);
+      this.getCategoryQuotes(value.quoteCategory);
     })
 
     this.idSearchForm = new FormGroup({
@@ -55,7 +53,7 @@ export class QuotePageComponent implements OnInit, OnDestroy {
       )
   }
 
-  private getCategoryCharacters(quoteCategory: string) {
+  private getCategoryQuotes(quoteCategory: string) {
     if (this.quotesCategory === quoteCategory) {
       return;
     }

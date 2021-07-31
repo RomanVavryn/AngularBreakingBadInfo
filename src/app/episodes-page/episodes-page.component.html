@@ -2,7 +2,7 @@
 
   <div class="col-md-4 col-lg-4 col-xl-2">
     <form [formGroup]="categoryForm!" class="mt-4 w-100">
-      <select formControlName="episodesCategory" id="categoryCharacters" class="form-select">
+      <select formControlName="episodesCategory" class="form-select">
         <option value="Breaking+Bad">Breaking Bad</option>
         <option value="Better+Call+Saul">Better Call Saul</option>
       </select>
@@ -10,11 +10,11 @@
   </div>
 
   <div class="col-md-5 col-lg-4 col-xl-3">
-    <form [formGroup]="idSearchForm!" (ngSubmit)="onIdSearch()" class="my-4  w-100">
+    <form [formGroup]="idSearchForm!" (ngSubmit)="onIdSearch()" class="my-4 w-100">
       <div class="input-group">
         <span class="input-group-text">Character ID</span>
         <input formControlName="episodeId" type="number" id="idSearch" name="idSearch" class="form-control"
-               placeholder="character id" min="1" max="116" value="1">
+               placeholder="Episode id" min="1" max="116" value="1">
         <button type="submit" class="btn btn-outline-secondary rounded"
                 [disabled]="idSearchForm?.get('episodeId')?.invalid">GET
         </button>
@@ -27,40 +27,37 @@
 
 
 <div *ngIf="episodesLoaded else episodeLoader">
-<div class="accordion py-4"
-     *ngFor="let episode of episodesArr;let i = index"
-     id="accordion{{i}}">
-
-  <div class="accordion-item">
-    <h2 class="accordion-header"
-        id="heading{{i}}">
-      <button
-        class="accordion-button collapsed"
-        type="button"
-        data-bs-toggle="collapse"
-        attr.data-bs-target="#collapse{{i}}"
-        aria-expanded="false"
-        attr.aria-controls="collapse{{i}}">
-        Season: {{episode.season}}, Episode: {{episode.episode}}
-      </button>
-    </h2>
-    <div id="collapse{{i}}"
-         class="accordion-collapse collapse "
-         attr.aria-labelledby="heading{{i}}">
-      <div
-        class="accordion-body">
-        <ul class="list-group">
-          <li class="list-group-item">Episode name: {{episode.title}}</li>
-          <li class="list-group-item">Air Date: {{episode.air_date | date}}</li>
-          <li class="list-group-item">Characters: {{episode.characters.join(', ')}}</li>
-          <li class="list-group-item">Series: {{episode.series}}</li>
-
-        </ul>
+  <div class="accordion py-4"
+       *ngFor="let episode of episodesArr;let i = index"
+       id="accordion{{i}}">
+    <div class="accordion-item">
+      <h2 class="accordion-header"
+          id="heading{{i}}">
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          attr.data-bs-target="#collapse{{i}}"
+          aria-expanded="false"
+          attr.aria-controls="collapse{{i}}">
+          Season: {{episode.season}}, Episode: {{episode.episode}}
+        </button>
+      </h2>
+      <div id="collapse{{i}}"
+           class="accordion-collapse collapse "
+           attr.aria-labelledby="heading{{i}}">
+        <div
+          class="accordion-body">
+          <ul class="list-group">
+            <li class="list-group-item">Episode name: {{episode.title}}</li>
+            <li class="list-group-item">Air Date: {{episode.air_date | date}}</li>
+            <li class="list-group-item">Characters: {{episode.characters.join(', ')}}</li>
+            <li class="list-group-item">Series: {{episode.series}}</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-
-</div>
 </div>
 
 <ng-template #episodeLoader>
