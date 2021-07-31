@@ -1,6 +1,53 @@
+<div class="row mb-4">
+
+  <div class="col-md-6 col-lg-4">
+    <form [formGroup]="searchForm!" (ngSubmit)="onNameSearch()" class="mt-4 mb-2 w-100">
+      <div class="input-group">
+        <input formControlName="filter" type="text" id="nameFilter" name="nameFilter" class="form-control"
+               placeholder="Name">
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+      </div>
+    </form>
+    <label for="nameFilter">Search character death by name</label>
+  </div>
+
+  <div class="col-md-3 col-xl-2">
+    <button type="button" class="btn btn-dark mt-4 px-3" (click)="onRandomDeath()">Random Death</button>
+  </div>
+
+  <div class="col-md-3 col-xl-2">
+    <div class="d-inline-block border text-white rounded bg-info px-3 py-2 mt-4">
+      Total deaths: {{deathCount}}
+    </div>
+  </div>
+
+</div>
+
+<div class="card mb-3 mx-auto" style="max-width: 870px;" *ngIf="randomDeathLoaded">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{randomDeath?.img}}" class="img-fluid rounded-start" alt="{{randomDeath?.nickname}}">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title mb-0">Name: {{randomDeath?.death}}
+          <span class="d-inline-block rounded px-2 py-1 bg-dark text-light">{{randomDeath?.nickname}}</span>
+        </h5>
+        <p class="card-text mb-3"> {{randomDeath?.occupation?.join(', ')}}</p>
+        <p class="card-text mb-1">Killer: {{randomDeath?.responsible}}</p>
+        <p class="card-text mb-1">Died by: {{randomDeath?.cause}}</p>
+        <p class="card-text mb-1">Last words: {{randomDeath?.last_words}}</p>
+        <p class="card-text mb-1">Season,s: {{randomDeath?.appearance}}</p>
+        <p class="card-text mb-1"><small class="text-muted">Died in season: {{randomDeath?.season}},
+          episode: {{randomDeath?.episode}}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 py-4"
      *ngIf="deathsLoaded else deathLoader">
-  <div class="col" *ngFor="let death of deathsArr">
+  <div class="col mx-auto" *ngFor="let death of deathsArr">
     <div class="card h-100">
       <div class="card-body">
         <h5 class="card-title">Killer: {{death.responsible}}</h5>
@@ -13,6 +60,12 @@
         <li class="list-group-item">Number of deaths: {{death.number_of_deaths}}</li>
       </ul>
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <h2 *ngIf="deathsArr?.length! < 1" class="text-center">No Quotes Found!</h2>
   </div>
 </div>
 

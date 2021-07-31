@@ -26,9 +26,10 @@ export class HttpService {
 
   // Death,s
   allDeaths: string = this.baseUrl + '/deaths';
-  // singleDeath: string = this.baseUrl + 'death';
-  randomDeath: string = this.baseUrl + '/random-death';
+  deathInfo: string = this.baseUrl + '/death';
+
   deathCount: string = this.baseUrl + '/death-count';
+  randomDeath: string = this.baseUrl + '/random-death';
 
   constructor(private http: HttpClient) {
   }
@@ -70,7 +71,7 @@ export class HttpService {
   // quotes
   getQuotes(category: string): Observable<any> {
     let params = new HttpParams();
-      params = params.append('series', category!);
+    params = params.append('series', category!);
     return this.http.get(this.Quotes, {params: params});
   }
 
@@ -79,29 +80,32 @@ export class HttpService {
   }
 
   getAuthorQuotes(search: string): Observable<any> {
-    let params = new HttpParams();
-    params = params.append('author', search!);
-    return this.http.get(this.AuthorQuote, {params: params});
+    return this.http.get(this.AuthorQuote, {params: {'author': search}});
   }
 
   getRandomQuotes(): Observable<any> {
     return this.http.get(this.randomQuote);
   }
 
-  getAllDeaths(): Observable<any> {
+  //deaths
+  getDeaths(): Observable<any> {
     return this.http.get(this.allDeaths);
   }
 
-  // getSingleDeath(): Observable<any> {
-  //   return this.http.get(this.singleDeath);
-  // }
+  getCharacterDeathInfo(search: string): Observable<any> {
+    return this.http.get(this.deathInfo, {params: {'name': search}});
+  }
+
+  getDeathCount(search?: string): Observable<any> {
+    let params = new HttpParams();
+    if (!!search) {
+      params = params.append('name', search!);
+    }
+    return this.http.get(this.deathCount, {params: params});
+  }
 
   getRandomDeath(): Observable<any> {
     return this.http.get(this.randomDeath);
-  }
-
-  getDeathCount(): Observable<any> {
-    return this.http.get(this.deathCount);
   }
 
 }
