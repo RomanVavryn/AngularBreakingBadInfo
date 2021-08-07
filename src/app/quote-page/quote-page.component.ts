@@ -1,16 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
-import {QuoteInterface} from "../shared/interfaces/quote.interface";
+import {Component, OnInit} from '@angular/core';
+import {QuoteInterface} from "./quote.interface";
 import {HttpService} from "../shared/http.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {QuoteDataService} from "./quote-data.service";
 
 @Component({
   selector: 'app-quote-page',
   templateUrl: './quote-page.component.html',
   styleUrls: ['./quote-page.component.scss']
 })
-export class QuotePageComponent implements OnInit, OnDestroy {
-  quotesSub: Subscription | undefined;
+export class QuotePageComponent implements OnInit {
   quoteArr: QuoteInterface[] | undefined;
   quotesLoaded: boolean = false;
 
@@ -18,9 +17,9 @@ export class QuotePageComponent implements OnInit, OnDestroy {
   idSearchForm: FormGroup | undefined;
   searchForm: FormGroup | undefined;
   quotesCategory: string = 'all';
-  searchValue: string = ''; // need for searchForm
+  searchValue: string = '';
 
-  constructor(private http: HttpService) {
+  constructor(private http: HttpService, private quoteDataService: QuoteDataService) {
   }
 
   ngOnInit(): void {
@@ -41,16 +40,13 @@ export class QuotePageComponent implements OnInit, OnDestroy {
       'filter': new FormControl(null)
     })
 
-    this.quotesSub = this.http.getQuotes(this.quotesCategory)
-      .subscribe((quotes: QuoteInterface[]) => {
+    this.quoteDataService.getQuotes(this.quotesCategory)
+      .subscribe(
+        (quotes: QuoteInterface[]) => {
           this.quoteArr = quotes;
           this.quotesLoaded = true;
-        },
-        error => {
-          console.log('something went wrong!');
-          console.error(error);
         }
-      )
+      );
   }
 
   private getCategoryQuotes(quoteCategory: string) {
@@ -59,40 +55,40 @@ export class QuotePageComponent implements OnInit, OnDestroy {
     }
     this.quotesCategory = quoteCategory;
     this.quotesLoaded = false;
-    this.quotesSub?.unsubscribe();
 
-    this.quotesSub = this.http.getQuotes(quoteCategory).subscribe(
-      (quotes: QuoteInterface[]) => {
-        this.quoteArr = quotes;
-        this.quotesLoaded = true;
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    );
+    this.quoteDataService.getQuotes(quoteCategory)
+      .subscribe(
+        (quotes: QuoteInterface[]) => {
+          this.quoteArr = quotes;
+          this.quotesLoaded = true;
+        });
+  }
 
+  private validId(id: number) {
+    if (id < 1 || id > 30 && id < 63 || id > 102) {
+      this.idSearchForm?.patchValue({'quoteId': 1});
+      return false;
+    }
+    return true;
+  }
+
+  private resetCategory() {
+    this.categoryForm?.patchValue({'quoteCategory': 'all'})
+    this.quotesCategory = 'all';
   }
 
   onIdSearch() {
     const id = this.idSearchForm?.get('quoteId')?.value;
-    if (id < 1 || id > 30 && id < 63 || id > 102) {
-      this.idSearchForm?.patchValue({'quoteId': 1});
+    if (this.validId(id)) {
+      this.quotesLoaded = false;
+      this.quoteDataService.getSingleQuote(id)
+        .subscribe((quotes: QuoteInterface[]) => {
+          this.quoteArr = quotes;
+          this.quotesLoaded = true;
+        });
       return;
     }
-    this.quotesLoaded = false;
-    this.quotesSub?.unsubscribe();
-
-    this.quotesSub = this.http.getSingleQuote(id).subscribe(
-      (quotes: QuoteInterface[]) => {
-        this.quoteArr = quotes;
-        this.quotesLoaded = true;
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    );
+    return;
   }
 
   onNameSearch() {
@@ -101,44 +97,26 @@ export class QuotePageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.quotesSub?.unsubscribe();
-    this.quotesLoaded = false;
     this.searchValue = newSearchValue;
-    this.categoryForm?.patchValue({'quoteCategory': 'all'})
-    this.quotesCategory = 'all';
+    this.quotesLoaded = false;
+    this.resetCategory();
 
-    this.quotesSub = this.http.getAuthorQuotes(newSearchValue)
-      .subscribe(
-        (quotes: QuoteInterface[]) => {
-          this.quoteArr = quotes
-          this.quotesLoaded = true;
-        },
-        (error => {
-          console.log('something went wrong!');
-          console.error(error);
-        })
-      );
+    this.quoteDataService.onNameSearch(newSearchValue)
+      .subscribe((quotes: QuoteInterface[]) => {
+        this.quoteArr = quotes;
+        this.quotesLoaded = true;
+      });
   }
 
   getRandomQuote() {
-    this.quotesSub?.unsubscribe();
     this.quotesLoaded = false;
 
-    this.quotesSub = this.http.getRandomQuotes()
+    this.quoteDataService.getRandomQuote()
       .subscribe(
         (quote: QuoteInterface[]) => {
           this.quoteArr = quote
           this.quotesLoaded = true;
-        },
-        (error => {
-          console.log('something went wrong!');
-          console.error(error);
-        })
-      );
-  }
-
-  ngOnDestroy(): void {
-    this.quotesSub?.unsubscribe();
+        });
   }
 
 }

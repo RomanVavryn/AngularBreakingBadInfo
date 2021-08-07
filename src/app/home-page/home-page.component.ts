@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpService} from "../shared/http.service";
 import {Subscription} from "rxjs";
-import {QuoteInterface} from "../shared/interfaces/quote.interface";
+import {QuoteInterface} from "../quote-page/quote.interface";
 
 @Component({
   selector: 'app-home-page',
