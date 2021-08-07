@@ -94,20 +94,15 @@ export class HttpService {
     return this.http.get(this.allDeaths);
   }
 
-  getCharacterDeathInfo(search: string): Observable<any> {
-    return this.http.get(this.deathInfo, {params: {'name': search}});
+  getDeathCount(): Observable<any> {
+    return this.http.get(this.deathCount);
   }
 
-  getDeathCount(search?: string): Observable<any> {
-    let params = new HttpParams();
-    if (!!search) {
-      params = params.append('name', search!);
-    }
-    return this.http.get(this.deathCount, {params: params});
+  getCharacterDeathInfo(search: string): Observable<any> {
+    return this.http.get(this.deathInfo, {params: {'name': search}});
   }
 
   getRandomDeath(): Observable<any> {
     return this.http.get(this.randomDeath);
   }
-
 }
