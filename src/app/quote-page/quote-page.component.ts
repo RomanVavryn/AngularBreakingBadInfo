@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {QuoteInterface} from "./quote.interface";
-import {HttpService} from "../shared/http.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {QuoteDataService} from "./quote-data.service";
 
@@ -19,7 +18,7 @@ export class QuotePageComponent implements OnInit {
   quotesCategory: string = 'all';
   searchValue: string = '';
 
-  constructor(private http: HttpService, private quoteDataService: QuoteDataService) {
+  constructor(private quoteDataService: QuoteDataService) {
   }
 
   ngOnInit(): void {

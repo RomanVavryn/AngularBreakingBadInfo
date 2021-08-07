@@ -71,7 +71,9 @@ export class HttpService {
   // quotes
   getQuotes(category: string): Observable<any> {
     let params = new HttpParams();
-    params = params.append('series', category!);
+    if (category !== 'all') {
+      params = params.append('series', category!);
+    }
     return this.http.get(this.Quotes, {params: params});
   }
 
