@@ -1,16 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
-import {HttpService} from "../shared/http.service";
-import {EpisodesInterface} from "../shared/interfaces/episode.interface";
+import {Component, OnInit} from '@angular/core';
+import {EpisodesInterface} from "./episode.interface";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {EpisodesDataService} from "./episodes-data.service";
 
 @Component({
   selector: 'app-episodes-page',
   templateUrl: './episodes-page.component.html',
   styleUrls: ['./episodes-page.component.scss']
 })
-export class EpisodesPageComponent implements OnInit, OnDestroy {
-  episodesSub: Subscription | undefined;
+export class EpisodesPageComponent implements OnInit {
   episodesArr: EpisodesInterface[] | undefined;
   episodesLoaded: boolean = false;
 
@@ -18,7 +16,7 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
   idSearchForm: FormGroup | undefined;
   episodesCategory: string = 'Breaking+Bad';
 
-  constructor(private http: HttpService) {
+  constructor(private episodesDataService: EpisodesDataService) {
   }
 
   ngOnInit(): void {
@@ -35,17 +33,12 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
       'episodeId': new FormControl(1, [Validators.required, Validators.min(1), Validators.max(102)])
     })
 
-    this.episodesSub = this.http.getEpisodes(this.episodesCategory)
+    this.episodesDataService.getEpisodes(this.episodesCategory)
       .subscribe(
         (episodes: EpisodesInterface[]) => {
           this.episodesArr = episodes;
           this.episodesLoaded = true;
-        },
-        (error => {
-          console.log('something went wrong!');
-          console.error(error);
-        })
-      );
+        });
   }
 
   private getEpisodesCategory(episodesCategory: string) {
@@ -54,19 +47,13 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
     }
     this.episodesCategory = episodesCategory;
     this.episodesLoaded = false;
-    this.episodesSub?.unsubscribe();
 
-    this.episodesSub = this.http.getEpisodes(episodesCategory).subscribe(
-      (episodes: EpisodesInterface[]) => {
-        this.episodesArr = episodes;
-        this.episodesLoaded = true;
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    );
-
+    this.episodesDataService.getEpisodes(episodesCategory)
+      .subscribe(
+        (episodes: EpisodesInterface[]) => {
+          this.episodesArr = episodes;
+          this.episodesLoaded = true;
+        });
   }
 
   onIdSearch() {
@@ -76,22 +63,12 @@ export class EpisodesPageComponent implements OnInit, OnDestroy {
       return;
     }
     this.episodesLoaded = false;
-    this.episodesSub?.unsubscribe();
-
-    this.episodesSub = this.http.getSingleEpisode(id).subscribe(
-      (episode: EpisodesInterface[]) => {
-        this.episodesArr = episode;
-        this.episodesLoaded = true;
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.episodesSub?.unsubscribe();
+    this.episodesDataService.getSingleEpisode(id)
+      .subscribe(
+        (episode: EpisodesInterface[]) => {
+          this.episodesArr = episode;
+          this.episodesLoaded = true;
+        });
   }
 
 }
