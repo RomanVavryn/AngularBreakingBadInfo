@@ -1,17 +1,15 @@
-import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
-import {CharacterInterface} from "../shared/interfaces/character.interface";
-import {HttpService} from "../shared/http.service";
+import {Component, OnInit} from '@angular/core';
+import {CharacterInterface} from "./character.interface";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {CharactersDataService} from "./characters-data.service";
 
 @Component({
   selector: 'app-characters-page',
   templateUrl: './characters-page.component.html',
   styleUrls: ['./characters-page.component.scss']
 })
-export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
+export class CharactersPageComponent implements OnInit {
   // character,s
-  charactersSub: Subscription | undefined;
   charactersArr: CharacterInterface[] | undefined;
   charactersLoaded: boolean = false;
   // filters
@@ -28,7 +26,7 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
   nextPageDisabled: boolean = false;
   prevPageDisabled: boolean = false;
 
-  constructor(private http: HttpService) {
+  constructor(private charactersDataService: CharactersDataService) {
   }
 
   ngOnInit(): void {
@@ -60,21 +58,14 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
       'characterId': new FormControl(1, [Validators.required, Validators.min(1), Validators.max(116)])
     })
 
-    this.charactersSub = this.http.getCharacters(this.charactersPerPage, this.charactersPage, this.charactersCategory, this.searchValue).subscribe(
-      (characters: CharacterInterface[]) => {
-        this.charactersArr = characters;
-        this.charactersLoaded = true;
-        this.canChangePage();
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    );
-  }
-
-  ngDoCheck(): void {
-    this.canChangePage();
+    this.charactersDataService.getCharacters(
+      this.charactersPerPage, this.charactersPage, this.charactersCategory, this.searchValue)
+      .subscribe(
+        (characters: CharacterInterface[]) => {
+          this.charactersArr = characters;
+          this.charactersLoaded = true;
+          this.canChangePage();
+        });
   }
 
   private getCategoryCharacters(categoryCharacters: string) {
@@ -85,45 +76,32 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     this.charactersLoaded = false;
     this.charactersPage = 0;
     this.canChangePage();
-    this.charactersSub?.unsubscribe();
 
-    this.charactersSub = this.http.getCharacters(this.charactersPerPage, this.charactersPage, categoryCharacters).subscribe(
-      (characters: CharacterInterface[]) => {
-        this.charactersArr = characters;
-        this.charactersLoaded = true;
-        this.canChangePage();
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    );
-
+    this.charactersDataService.getCharacters(this.charactersPerPage, this.charactersPage, categoryCharacters)
+      .subscribe(
+        (characters: CharacterInterface[]) => {
+          this.charactersArr = characters;
+          this.charactersLoaded = true;
+          this.canChangePage();
+        });
   }
 
   private changeCharactersPerPage(count: string) {
     if (this.charactersPerPage === count) {
       return;
     }
-    this.charactersPage = 0;
     this.charactersPerPage = count;
+    this.charactersPage = 0;
     this.charactersLoaded = false;
     this.canChangePage();
-    this.charactersSub?.unsubscribe();
 
-    this.charactersSub = this.http.getCharacters(count, this.charactersPage, this.charactersCategory)
+    this.charactersDataService.getCharacters(count, this.charactersPage, this.charactersCategory)
       .subscribe(
         (characters: CharacterInterface[]) => {
-          console.log(characters)
           this.charactersArr = characters;
           this.charactersLoaded = true;
           this.canChangePage();
-        },
-        (error => {
-          console.log('something went wrong!');
-          console.error(error);
-        })
-      );
+        });
   }
 
   private canChangePage(): void {
@@ -188,7 +166,6 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
       return;
     }
 
-    this.charactersSub?.unsubscribe();
     this.charactersLoaded = false;
     this.searchValue = newSearchValue;
     this.charactersPerPageForm?.patchValue({'characterShowCount': '99'})
@@ -197,21 +174,16 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
     this.categoryForm?.patchValue({'categoryCharacters': 'all'})
     this.charactersCategory = 'all';
 
-    this.charactersSub = this.http.getCharacters(this.charactersPerPage, this.charactersPage, this.charactersCategory, newSearchValue)
+    this.charactersDataService.getCharacters(
+      this.charactersPerPage, this.charactersPage, this.charactersCategory, newSearchValue)
       .subscribe(
         (characters: CharacterInterface[]) => {
           this.charactersArr = characters
           this.charactersLoaded = true;
-        },
-        (error => {
-          console.log('something went wrong!');
-          console.error(error);
-        })
-      );
+        });
   }
 
   onPageChange(action: string) {
-    this.charactersSub?.unsubscribe();
     this.charactersLoaded = false;
     this.canChangePage();
 
@@ -226,17 +198,13 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
       this.charactersPage -= 1;
     }
 
-    this.charactersSub = this.http.getCharacters(this.charactersPerPage, this.charactersPage, this.charactersCategory)
+    this.charactersDataService.getCharacters(this.charactersPerPage, this.charactersPage, this.charactersCategory)
       .subscribe(
         (characters: CharacterInterface[]) => {
           this.charactersArr = characters;
           this.charactersLoaded = true;
           this.canChangePage();
-        },
-        (error => {
-          console.error(error);
         })
-      )
   }
 
   onRandomCharacters(): void {
@@ -252,20 +220,14 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
 
     this.reset();
     this.canChangePage();
-    this.charactersSub?.unsubscribe();
 
-    this.charactersSub = this.http.getRandomCharacters(+this.randomForm?.get('randomCount')?.value)
+    this.charactersDataService.getRandomCharacters(+this.randomForm?.get('randomCount')?.value)
       .subscribe(
         (characters: CharacterInterface[]) => {
           this.charactersArr = characters
           this.charactersLoaded = true;
           this.canChangePage();
-        },
-        (error => {
-          console.log('something went wrong!');
-          console.error(error);
-        })
-      );
+        });
   }
 
   onIdSearch() {
@@ -277,24 +239,12 @@ export class CharactersPageComponent implements OnInit, OnDestroy, DoCheck {
 
     this.reset();
     this.canChangePage();
-    this.charactersSub?.unsubscribe();
-
-    this.charactersSub = this.http.getSingleCharacter(id).subscribe(
-      (character: CharacterInterface[]) => {
-        this.charactersArr = character;
-        this.charactersLoaded = true;
-        this.canChangePage();
-      },
-      (error => {
-        console.log('something went wrong!');
-        console.error(error);
-      })
-    );
+    this.charactersDataService.getSingleCharacter(id)
+      .subscribe(
+        (character: CharacterInterface[]) => {
+          this.charactersArr = character;
+          this.charactersLoaded = true;
+          this.canChangePage();
+        });
   }
-
-  ngOnDestroy(): void {
-    this.charactersSub?.unsubscribe();
-  }
-
-
 }

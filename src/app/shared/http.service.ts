@@ -35,19 +35,7 @@ export class HttpService {
   }
 
   // characters
-  getCharacters(count?: string, page?: number, category?: string, search?: string): Observable<any> {
-    let params = new HttpParams();
-    if (count !== '99') {
-      params = params.append('limit', count!);
-      params = params.append('offset', page!);
-    }
-    if (category !== 'all') {
-      params = params.append('category', category!);
-    }
-    if (!!search) {
-      params = params.append('name', search!);
-    }
-
+  getCharacters(params: HttpParams): Observable<any> {
     return this.http.get(this.Characters, {params: params});
   }
 
@@ -69,11 +57,7 @@ export class HttpService {
   }
 
   // quotes
-  getQuotes(category: string): Observable<any> {
-    let params = new HttpParams();
-    if (category !== 'all') {
-      params = params.append('series', category!);
-    }
+  getQuotes(params?: HttpParams): Observable<any> {
     return this.http.get(this.Quotes, {params: params});
   }
 
